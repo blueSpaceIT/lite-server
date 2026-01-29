@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "restart": "pm2 restart api.oditicareer.com --update-env",
-        "start:prod": "pm2 start ./dist/app/server.js --name \"api.oditicareer.com\"",
+        "restart": "pm2 restart api.liteedu.com --update-env",
+        "start:prod": "pm2 start ./dist/app/server.js --name \"api.liteedu.com\"",
         "start:dev": "ts-node-dev --respawn --transpile-only src/app/server.ts",
         "build": "tsc",
         "lint": "npx eslint src --ignore-pattern .ts",
