@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import auth from '../../middlewares/auth';
-import { USER_ROLES } from '../user/user.constant';
 import validateRequest from '../../middlewares/validateRequest';
-import { SliderValidations } from './slider.validation';
+import { USER_ROLES } from '../user/user.constant';
 import { SliderControllers } from './slider.controller';
+import { SliderValidations } from './slider.validation';
 
 const router = Router();
 
@@ -26,7 +26,6 @@ router.post(
 // get all slider galleries route
 router.get(
     '/',
-    auth(USER_ROLES.superAdmin, USER_ROLES.admin),
     SliderControllers.getAllSliderGalleries,
 );
 
