@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser'; // Ensure this is installed and imported
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
@@ -24,6 +23,7 @@ app.set('query parser', (str: string) => qs.parse(str));
 app.use(
     cors({
         origin: [
+            'https://www.oditicareer.com',
             config.frontendUrl as string,
             config.panelUrl as string,
             'http://localhost:5173',
@@ -31,23 +31,19 @@ app.use(
             'http://localhost:5174',
         ],
         credentials: true,
-        allowedHeaders: [
-            'Content-Type',
-            'Authorization',
-            'uploadid',
-            'chunkindex',
-            'X-Requested-With',
-        ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "uploadid", "chunkindex"],
     }),
 );
 
-// Increase body limits for JSON, URL-encoded, and raw binary data
-app.use(bodyParser.json({ limit: '100mb' })); // For JSON payloads
-app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' })); // For URL-encoded payloads
-app.use(bodyParser.raw({ limit: '100mb', type: '*/*' })); // For raw binary uploads like your chunks
-
 // cookie parser
 app.use(cookieParser());
+
+// json parser
+app.use(express.json());
+
+// urlencoded parser
+app.use(express.urlencoded({ extended: true }));
 
 // device parser
 app.use(useragent.express());
