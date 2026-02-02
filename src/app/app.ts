@@ -12,6 +12,7 @@ import { chunkUpload } from '../utils/chunkUpload';
 import { finalizeUpload } from '../utils/finalizeUpload';
 import secretGenerate from '../utils/secretGenerate';
 import sendSMS from '../utils/sendSMS';
+import path from 'path';
 
 // initialize express application
 const app: Application = express();
