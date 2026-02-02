@@ -18,6 +18,8 @@ const app: Application = express();
 
 // query parser
 app.set('query parser', (str: string) => qs.parse(str));
+// serve access to files
+
 
 // cross origin resources
 app.use(
@@ -40,6 +42,8 @@ app.use(
         ],
     }),
 );
+app.use('/uploads', express.static(path.resolve('./uploads')));
+
 
 // cookie parser
 app.use(cookieParser());
