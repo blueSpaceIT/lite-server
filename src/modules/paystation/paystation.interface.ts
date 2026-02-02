@@ -1,4 +1,3 @@
-
 export interface IPayStationPaymentRequest {
     totalAmount: number;
     invoiceID: string;

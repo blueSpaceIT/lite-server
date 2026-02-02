@@ -72,7 +72,7 @@ router.delete(
     MediaControllers.deleteMedia,
 );
 
-router.post("/merge-chunks", MediaControllers.mergeChunks);
-router.post("/videos", MediaControllers.createVideo);
+router.post('/merge-chunks', MediaControllers.mergeChunks);
+router.post('/videos', MediaControllers.createVideo);
 
 export const MediaRoutes = router;

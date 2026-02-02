@@ -134,9 +134,7 @@ const deleteMediaFromDB = async (id: string) => {
     return result;
 };
 
-const createVideoIntoDB = async (
-    payload: Partial<IVideo>
-) => {
+const createVideoIntoDB = async (payload: Partial<IVideo>) => {
     const result = await VideoModel.create(payload);
     return result;
 };

@@ -7,7 +7,6 @@ import {
     INote,
 } from './courseContent.interface';
 
-
 export const liveClassSchema = new Schema<ILiveClass>({
     title: { type: String, required: true },
     description: { type: String },

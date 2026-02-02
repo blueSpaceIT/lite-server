@@ -1,4 +1,3 @@
-
 import { Router } from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { PayStationControllers } from './paystation.controller';
@@ -14,15 +13,9 @@ router.post(
 );
 
 // callback (PayStation redirects here)
-router.get(
-    '/callback/:type',
-    PayStationControllers.handleCallback,
-);
+router.get('/callback/:type', PayStationControllers.handleCallback);
 
 // optional manual verification
-router.post(
-    '/verify-payment',
-    PayStationControllers.verifyPayment,
-);
+router.post('/verify-payment', PayStationControllers.verifyPayment);
 
 export const PayStationRoutes = router;

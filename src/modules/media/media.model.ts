@@ -1,14 +1,13 @@
 import { model, Schema } from 'mongoose';
 import { IMedia, IVideo } from './media.interface';
 
-
 const videoSchema = new Schema<IVideo>({
     url: { type: String, required: true },
     type: { type: String, enum: ['video'], required: true },
     size: { type: Number },
 });
 
-export const VideoModel = model<IVideo>("Video", videoSchema);
+export const VideoModel = model<IVideo>('Video', videoSchema);
 // media schema
 const mediaSchema = new Schema<IMedia>(
     {

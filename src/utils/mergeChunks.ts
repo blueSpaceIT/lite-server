@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import { buildUploadPath } from "./mediaPath";
+import fs from 'fs';
+import path from 'path';
+import { buildUploadPath } from './mediaPath';
 
 export const mergeChunks = async (
     uploadId: string,
@@ -8,7 +8,7 @@ export const mergeChunks = async (
     finalFileName: string,
 ) => {
     const tempDir = buildUploadPath(`videos/.tmp/${uploadId}`);
-    const finalDir = buildUploadPath("videos");
+    const finalDir = buildUploadPath('videos');
 
     fs.mkdirSync(finalDir, { recursive: true });
 

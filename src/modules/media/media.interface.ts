@@ -11,7 +11,7 @@ export interface IMedia {
 }
 
 export interface IVideo {
-  url: string;
-  type: 'video';
-  size?: number;
+    url: string;
+    type: 'video';
+    size?: number;
 }

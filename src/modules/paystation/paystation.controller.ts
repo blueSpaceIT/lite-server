@@ -5,7 +5,6 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { PayStationServices } from './paystation.service';
 
-
 const createPayment = catchAsync(async (req, res) => {
     const result = await PayStationServices.createPaymentRequest(req.body);
     sendResponse(res, {
@@ -18,12 +17,17 @@ const createPayment = catchAsync(async (req, res) => {
 
 const handleCallback = catchAsync(async (req, res) => {
     const { type } = req.params;
-    const result = await PayStationServices.handleCallback(type, req.query as any);
+    const result = await PayStationServices.handleCallback(
+        type,
+        req.query as any,
+    );
     res.redirect(result);
 });
 
 const verifyPayment = catchAsync(async (req, res) => {
-    const result = await PayStationServices.verifyTransaction(req.body.invoice_number);
+    const result = await PayStationServices.verifyTransaction(
+        req.body.invoice_number,
+    );
     sendResponse(res, {
         status: httpStatus.OK,
         success: true,

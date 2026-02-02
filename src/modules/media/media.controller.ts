@@ -1,7 +1,7 @@
-import fs from "fs";
+import fs from 'fs';
 import httpStatus from 'http-status';
-import path from "path";
-import { pipeline } from "stream";
+import path from 'path';
+import { pipeline } from 'stream';
 import AppError from '../../errors/AppError';
 import catchAsync from '../../utils/catchAsync';
 import { buildUploadPath } from '../../utils/mediaPath';
@@ -78,7 +78,7 @@ const createVideo = catchAsync(async (req, res) => {
     sendResponse(res, {
         status: httpStatus.CREATED,
         success: true,
-        message: "Video has been created successfully",
+        message: 'Video has been created successfully',
         data: result,
     });
 });
@@ -89,12 +89,12 @@ const mergeChunks = catchAsync(async (req, res) => {
     if (!uploadId || !totalChunks) {
         throw new AppError(
             httpStatus.BAD_REQUEST,
-            "uploadId & totalChunks are required"
+            'uploadId & totalChunks are required',
         );
     }
 
     const tempDir = buildUploadPath(`videos/.tmp/${uploadId}`);
-    const finalDir = buildUploadPath("videos/final");
+    const finalDir = buildUploadPath('videos/final');
     fs.mkdirSync(finalDir, { recursive: true });
 
     const finalFilePath = path.join(finalDir, `${uploadId}.mp4`);
@@ -105,16 +105,10 @@ const mergeChunks = catchAsync(async (req, res) => {
         const chunkPath = path.join(tempDir, `${i}.part`);
 
         if (!fs.existsSync(chunkPath)) {
-            throw new AppError(
-                httpStatus.BAD_REQUEST,
-                `Missing chunk ${i}`
-            );
+            throw new AppError(httpStatus.BAD_REQUEST, `Missing chunk ${i}`);
         }
 
-        await pipeline(
-            fs.createReadStream(chunkPath),
-            writeStream,
-        );
+        await pipeline(fs.createReadStream(chunkPath), writeStream);
 
         fs.unlinkSync(chunkPath);
     }
@@ -126,17 +120,16 @@ const mergeChunks = catchAsync(async (req, res) => {
 
     const video = await MediaServices.createVideoIntoDB({
         url: `/uploads/videos/final/${uploadId}.mp4`,
-        type: "video",
+        type: 'video',
     });
 
     sendResponse(res, {
         status: httpStatus.OK,
         success: true,
-        message: "Video uploaded successfully",
+        message: 'Video uploaded successfully',
         data: video,
     });
 });
-
 
 export const MediaControllers = {
     createMedia,
