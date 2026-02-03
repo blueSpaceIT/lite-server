@@ -26,7 +26,6 @@ app.set('query parser', (str: string) => qs.parse(str));
 app.use(
     cors({
         origin: [
-            'https://www.oditicareer.com',
             config.frontendUrl as string,
             config.panelUrl as string,
             'http://localhost:5173',
@@ -40,6 +39,8 @@ app.use(
             'Authorization',
             'uploadid',
             'chunkindex',
+             'x-requested-with',
+             
         ],
     }),
 );
