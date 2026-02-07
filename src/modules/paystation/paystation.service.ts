@@ -11,7 +11,6 @@ import {
     IPayStationPaymentRequest,
     IPayStationTransactionStatus,
 } from './paystation.interface';
-import { generateInvoiceID } from '../../utils/generateInvoiceID';
 
 const PAYSTATION_URL = 'https://api.paystation.com.bd';
 
@@ -19,7 +18,7 @@ const createPaymentRequest = async (payload: IPayStationPaymentRequest) => {
     const body = {
         merchantId: config.paystationMerchantId,
         password: config.paystationPassword,
-        invoice_number: generateInvoiceID,
+        invoice_number: payload.invoiceID,
         currency: 'BDT',
         payment_amount: payload.totalAmount,
         cust_name: payload.name,
