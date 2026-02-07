@@ -4,7 +4,7 @@ export interface IAccount {
     id: string;
     type: 'Earning' | 'Expense';
     reason: string[];
-    method: 'Cash' | 'SSLCommerz' | 'Bank' | 'Bkash' | 'Nagad' | 'Rocket';
+    method: 'Cash' | 'SSLCommerz' | 'Bkash' | 'Nagad' | 'Rocket' | 'PayStation';
     amount: number;
     branch: Types.ObjectId;
     createdAt?: Date;
