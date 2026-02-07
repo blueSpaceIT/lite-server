@@ -2,9 +2,11 @@ import z from 'zod';
 
 // payment details validation
 const paymentDetailsValidationSchema = z.object({
-    method: z.enum(['Cash', 'SSLCommerz', 'Bkash', 'Nagad', 'Rocket'], {
-        message: 'Method is invalid',
-    }),
+    method: z.enum(
+        ['Cash', 'SSLCommerz', 'Bkash', 'Nagad', 'Rocket', 'PayStation'],
+        { message: 'Method is invalid' }
+    ),
+
     amount: z.number({ required_error: 'Price is required' }),
     account: z.string().optional(),
     trxID: z.string().optional(),

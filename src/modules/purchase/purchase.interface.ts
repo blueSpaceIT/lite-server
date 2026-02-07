@@ -1,12 +1,13 @@
 import { Types } from 'mongoose';
 
 export interface IPaymentDetails {
-    method: 'Cash' | 'SSLCommerz' | 'Bkash' | 'Nagad' | 'Rocket';
+    method: 'Cash' | 'SSLCommerz' | 'Bkash' | 'Nagad' | 'Rocket' | 'PayStation';
     amount: number;
     account?: string;
     trxID?: string;
     paidAt?: Date;
 }
+
 
 export interface IPurchase {
     id: string;

@@ -9,6 +9,7 @@ import { Purchase } from '../purchase/purchase.model';
 import {
     IPayStationInitiateResponse,
     IPayStationPaymentRequest,
+    IPayStationTransactionStatus,
 } from './paystation.interface';
 
 const PAYSTATION_URL = 'https://api.paystation.com.bd';
@@ -44,40 +45,64 @@ const createPaymentRequest = async (payload: IPayStationPaymentRequest) => {
 
 const handleCallback = async (
     type: string,
-    query: { status: string; invoice_number: string; trx_id?: string },
+    query: { status: string; invoice_number: string; trx_id?: string }
 ) => {
     const { status, invoice_number, trx_id } = query;
 
-    if (status !== 'Successful') {
+    // normalize status
+    if (status?.toLowerCase() !== 'successful') {
         return `https://liteedu.com/payment/${type}?status=FAILED&invoice=${invoice_number}`;
     }
 
-    // Verify transaction from PayStation
     const verify = await verifyTransaction(invoice_number);
 
     if (verify.trx_status !== 'success') {
         return `https://liteedu.com/payment/${type}?status=FAILED&invoice=${invoice_number}`;
     }
 
+    // ---------- PURCHASE ----------
     if (type === 'purchase') {
         const purchase = await Purchase.findOne({ id: invoice_number });
         if (!purchase)
             throw new AppError(httpStatus.NOT_FOUND, 'Purchase not found');
 
-        purchase.payStatus = 'Paid';
-        purchase.status = 'Active';
+        const amount = Number(verify.payment_amount);
+
+        purchase.paymentDetails = purchase.paymentDetails || [];
+        purchase.paymentDetails.push({
+            method: 'PayStation',
+            amount,
+            trxID: verify.trx_id,
+            paidAt: new Date(),
+        });
+
+        purchase.paidAmount += amount;
+
+        purchase.payStatus =
+            purchase.paidAmount >= purchase.totalAmount
+                ? 'Paid'
+                : purchase.paidAmount > 0
+                    ? 'Partial'
+                    : 'Pending';
+
+        purchase.status =
+            purchase.payStatus === 'Paid' ? 'Active' : 'Pending';
+
         await purchase.save();
     }
 
+    // ---------- ORDER ----------
     if (type === 'order') {
         const order = await Order.findOne({ id: invoice_number });
-        if (!order) throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
+        if (!order)
+            throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
 
         order.payStatus = 'Paid';
         order.status = 'Delivered';
         await order.save();
     }
 
+    // ---------- ACCOUNT ----------
     await Account.create({
         type: 'Earning',
         method: 'PayStation',
@@ -88,11 +113,13 @@ const handleCallback = async (
     return `https://liteedu.com/payment/${type}?status=SUCCESS&trx_id=${trx_id}`;
 };
 
-const verifyTransaction = async (invoice_number: string) => {
+const verifyTransaction = async (
+    invoice_number: string
+): Promise<IPayStationTransactionStatus> => {
     if (!config.paystationMerchantId) {
         throw new AppError(
             httpStatus.INTERNAL_SERVER_ERROR,
-            'PayStation merchant ID is not configured',
+            'PayStation merchant ID is not configured'
         );
     }
 
@@ -103,9 +130,7 @@ const verifyTransaction = async (invoice_number: string) => {
     const response = await fetch(`${PAYSTATION_URL}/transaction-status`, {
         method: 'POST',
         headers,
-        body: new URLSearchParams({
-            invoice_number,
-        }).toString(),
+        body: new URLSearchParams({ invoice_number }).toString(),
     });
 
     const data = await response.json();

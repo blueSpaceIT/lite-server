@@ -4,7 +4,7 @@ import { IPaymentDetails, IPurchase } from './purchase.interface';
 const paymentDetailsSchema = new Schema<IPaymentDetails>({
     method: {
         type: String,
-        enum: ['Cash', 'SSLCommerz', 'Bkash', 'Nagad', 'Rocket'],
+        enum: ['Cash', 'SSLCommerz', 'Bkash', 'Nagad', 'Rocket', 'PayStation'],
         required: true,
     },
     amount: {

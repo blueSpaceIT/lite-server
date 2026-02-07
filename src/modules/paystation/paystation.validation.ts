@@ -6,7 +6,7 @@ const createPaymentSchema = z.object({
         invoiceID: z.string(),
         name: z.string(),
         phone: z.string(),
-        email: z.string().email(),
+        email: z.string().email().optional(),
         address: z.string(),
         type: z.enum(['purchase', 'order']),
         callbackURL: z.string().url(),
